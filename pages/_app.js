@@ -1,7 +1,12 @@
+import React from 'react'
+
 import '../styles/globals.css'
+import '../styles/index.css'
 
-function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
+export default function App({ Component, pageProps }) {
+  return (
+    <div id='root'>
+      <Component {...pageProps} />
+    </div>
+  )
 }
-
-export default MyApp
