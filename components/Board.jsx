@@ -1,7 +1,7 @@
 import React from 'react'
-import cn from 'classnames'
 import produce from 'immer'
 import shuffle from 'lodash.shuffle'
+import styled from 'styled-components'
 
 import * as L from '../lib'
 import * as Cell from './Cell'
@@ -61,16 +61,36 @@ export const makeRandom = (cols, rows) => {
 // VIEW ============================================
 export const BoardView = ({ board, onClickAt }) => {
   return (
-    <div className='board'>
+    <Board>
       {board.map((cell, i) =>
         <Cell.View key={i} cell={cell} onClick={_ => onClickAt(i)}/>
       )}
-    </div>
+    </Board>
   )
 }
 
-export const ScreenView = ({ className, children }) => (
-  <div className={cn('screen', className)}>
+export const ScreenView = ({ background, children }) => (
+  <Screen background={background}>
     {children}
-  </div>
+  </Screen>
 )
+
+// ATOMS ============================================
+const Board = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  width: 640px;
+  height: 480px;
+  gap: 2px;
+`
+
+const Screen = styled.div`
+  text-align: center;
+  display: flex;
+  width: 640px;
+  height: 480px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-color: ${props => props.background};
+`

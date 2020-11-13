@@ -1,5 +1,5 @@
 import React from 'react'
-import cn from 'classnames'
+import styled from 'styled-components'
 
 // LOGIC ============================================
 // cel = {
@@ -26,10 +26,29 @@ export const View = ({ cell, onClick }) => {
   const { status, symbol } = cell
 
   return (
-    <div className={cn('cell', classByStatus(status))} onClick={onClick}>
+    <Cell status={status} onClick={onClick}>
       {status === Status.Closed ? '' : symbol}
-    </div>
+    </Cell>
   )
 }
 
-export const classByStatus = (status) => status.toLowerCase()
+// ATOMS ============================================
+const Cell = styled.div`
+  font-size: 4rem;
+  line-height: 1.1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100px;
+  background-color: ${({ status }) => statusToBackground(status)};
+  cursor: ${({ status }) => status === Status.Closed ? 'pointer' : 'auto'};
+`
+
+const statusToBackground = (status) => {
+  switch (status) {
+    case Status.Closed: return 'darkgray'
+    case Status.Open:   return '#dcdcdc'
+    case Status.Done:   return '#a8db8f'
+    case Status.Failed: return '#db8f8f'
+  }
+}

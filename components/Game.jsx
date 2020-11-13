@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import styled from 'styled-components'
 
 import * as Cell from './Cell'
 import * as Board from './Board'
@@ -52,7 +53,7 @@ const nextSecond = (state) => ({
   ...state, secondLeft: Math.max(state.secondLeft - 1, 0)
 })
 
-// LOGIC ============================================
+// VIEW ============================================
 export const View = () => {
   const [state, setState] = React.useState({
     ...startGame(),
@@ -118,26 +119,23 @@ export const View = () => {
   )
 }
 
-const StatusLineView = ({ status, secondLeft }) => {
-  // console.log(secondLeft)
-  return (
-    <div className='status-line'>
-      <div>{status === Status.Running ? '🙈' : 'Lets Go!'}</div>
-      <div className='timer'>
-        {status === Status.Running && `Second left: ${secondLeft}`}
-      </div>
+const StatusLineView = ({ status, secondLeft }) => (
+  <StatusLine>
+    <div>{status === Status.Running ? '🙈' : 'Lets Go!'}</div>
+    <div className='timer'>
+      {status === Status.Running && `Second left: ${secondLeft}`}
     </div>
-  )
-}
+  </StatusLine>
+)
 
 const ScreenBoxView = ({ status, board, onClickAt }) => {
   switch (status) {
     case Status.Running:
-      return <Board.BoardView board={board} onClickAt={onClickAt}/>
+      return <Board.BoardView board={board} onClickAt={onClickAt}  />
 
     case Status.Stopped:
       return (
-        <Board.ScreenView className='gray'>
+        <Board.ScreenView background={statusToBackground(status)}>
           <div>
             <h1>Memory Game</h1>
             <p className='small text-center'>Click anywhere to start!</p>
@@ -147,7 +145,7 @@ const ScreenBoxView = ({ status, board, onClickAt }) => {
 
     case Status.Won:
       return (
-        <Board.ScreenView className='green'>
+        <Board.ScreenView background={statusToBackground(status)}>
           <div>
             <h1>Victory!</h1>
             <p className='small text-center'>Click anywhere to start again!</p>
@@ -156,7 +154,7 @@ const ScreenBoxView = ({ status, board, onClickAt }) => {
       )
     case Status.Lost:
       return (
-        <Board.ScreenView className='red'>
+        <Board.ScreenView background={statusToBackground(status)}>
           <div>
             <h1>Defeat!</h1>
             <p className='small text-center'>Click anywhere to try again!</p>
@@ -165,3 +163,21 @@ const ScreenBoxView = ({ status, board, onClickAt }) => {
       )
   }
 }
+
+export const statusToBackground = (status) => {
+  switch (status) {
+    case Status.Won:  return '#a8db8f'
+    case Status.Lost: return '#db8f8f'
+    default:          return '#dcdcdc'
+  }
+}
+
+// ATOMS ============================================
+const StatusLine = styled.div`
+  color: gray;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+`
