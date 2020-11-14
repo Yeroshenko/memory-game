@@ -1,60 +1,61 @@
-import React, { useEffect } from 'react'
+import React, { FC, useEffect } from 'react'
 import styled from 'styled-components'
 
 import * as Cell from './Cell'
 import * as Board from './Board'
 
 // LOGIC ============================================
-const Status = {
-  Stopped: 'Stopped',
-  Running: 'Running',
-  Won: 'Won',
-  Lost: 'Lost'
+export enum Status {
+  Stopped, Running, Won, Lost
 }
 
-const startGame = () => ({
+export type State = {
+  board: Board.Board,
+  status: Status,
+  secondLeft: number
+}
+
+const startGame = (): State => ({
   board: Board.makeRandom(4, 3),
   status: Status.Running,
   secondLeft: 60
 })
 
 // CURRYING
-const openCell = (i) => (state) => {
-  return {
-    ...state,
-    board: Board.setStatusAt(i, Cell.Status.Open, state.board)
-  }
-}
+const openCell = (i: number) => (state: State): State => ({
+  ...state,
+  board: Board.setStatusAt(i, Cell.Status.Open, state.board)
+})
 
-const canOpenCell = (i, state) => Board.canOpenAt(i, state.board)
+const canOpenCell = (i: number, state: State): boolean => Board.canOpenAt(i, state.board)
 
-const succeedStep = (state) => ({
+const succeedStep = (state: State): State => ({
   ...state,
   board: Board.setStatusesBy(Cell.isOpen, Cell.Status.Done, state.board)
 })
 
-const failStep1 = (state) => ({
+const failStep1 = (state: State): State => ({
   ...state,
   board: Board.setStatusesBy(Cell.isOpen, Cell.Status.Failed, state.board)
 })
 
-const failStep2 = (state) => ({
+const failStep2 = (state: State): State => ({
   ...state,
   board: Board.setStatusesBy(Cell.isFailed, Cell.Status.Closed, state.board)
 })
 
-const hasWinningCond = (state) => state.board.filter(Cell.isDone).length === state.board.length
+const hasWinningCond = (state: State): Boolean => state.board.filter(Cell.isDone).length === state.board.length
 
-const hasLosingCond = (state) => !state.secondLeft
+const hasLosingCond = (state: State): Boolean => !state.secondLeft
 
-const setStatus = (status) => (state) => ({ ...state, status })
+const setStatus = (status: Status) => (state: State): State => ({ ...state, status })
 
-const nextSecond = (state) => ({
+const nextSecond = (state: State): State => ({
   ...state, secondLeft: Math.max(state.secondLeft - 1, 0)
 })
 
 // VIEW ============================================
-export const View = () => {
+export const View: FC = () => {
   const [state, setState] = React.useState({
     ...startGame(),
     status: Status.Stopped,
@@ -62,13 +63,13 @@ export const View = () => {
 
   const { board, status, secondLeft } = state
 
-  const handleStartingClick = () => {
+  const handleStartingClick = (): void => {
     if (status !== Status.Running) {
       setState(startGame)
     }
   }
 
-  const handleRunningClick = (i) => {
+  const handleRunningClick = (i: number): void => {
     if (status === Status.Running && canOpenCell(i, state)) {
       setState(openCell(i))
     }
@@ -99,7 +100,7 @@ export const View = () => {
 
   // Timer handling
   useEffect(() => {
-    let timer
+    let timer: ReturnType<typeof setInterval> | undefined = undefined
 
     if (status === Status.Running && !timer) {
       timer = setInterval(() => {
@@ -119,36 +120,45 @@ export const View = () => {
   )
 }
 
-const StatusLineView = ({ status, secondLeft }) => (
+type StatusLineView = {
+  status: Status,
+  secondLeft: number
+}
+
+const StatusLineView: FC<StatusLineView> = ({ status, secondLeft }) => (
   <StatusLine>
     <div>{status === Status.Running ? '🙈' : 'Lets Go!'}</div>
-    <div className='timer'>
+    <div>
       {status === Status.Running && `Second left: ${secondLeft}`}
     </div>
   </StatusLine>
 )
 
-const ScreenBoxView = ({ status, board, onClickAt }) => {
+type ScreenBoxViewProps = {
+  status: Status,
+  board: Board.Board,
+  onClickAt: (i: number) => void
+}
+
+const ScreenBoxView: FC<ScreenBoxViewProps> = ({ status, board, onClickAt }) => {
   switch (status) {
     case Status.Running:
-      return <Board.BoardView board={board} onClickAt={onClickAt}  />
-
+      return <Board.BoardView board={board} onClickAt={onClickAt}/>
     case Status.Stopped:
       return (
         <Board.ScreenView background={statusToBackground(status)}>
           <div>
             <h1>Memory Game</h1>
-            <p className='small text-center'>Click anywhere to start!</p>
+            <p>Click anywhere to start!</p>
           </div>
         </Board.ScreenView>
       )
-
     case Status.Won:
       return (
         <Board.ScreenView background={statusToBackground(status)}>
           <div>
             <h1>Victory!</h1>
-            <p className='small text-center'>Click anywhere to start again!</p>
+            <p>Click anywhere to start again!</p>
           </div>
         </Board.ScreenView>
       )
@@ -157,18 +167,21 @@ const ScreenBoxView = ({ status, board, onClickAt }) => {
         <Board.ScreenView background={statusToBackground(status)}>
           <div>
             <h1>Defeat!</h1>
-            <p className='small text-center'>Click anywhere to try again!</p>
+            <p>Click anywhere to try again!</p>
           </div>
         </Board.ScreenView>
       )
   }
 }
 
-export const statusToBackground = (status) => {
+export const statusToBackground = (status: Status): string => {
   switch (status) {
-    case Status.Won:  return '#a8db8f'
-    case Status.Lost: return '#db8f8f'
-    default:          return '#dcdcdc'
+    case Status.Won:
+      return '#a8db8f'
+    case Status.Lost:
+      return '#db8f8f'
+    default:
+      return '#dcdcdc'
   }
 }
 

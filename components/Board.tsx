@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FC } from 'react'
 import produce from 'immer'
 import shuffle from 'lodash.shuffle'
 import styled from 'styled-components'
@@ -8,75 +8,83 @@ import * as Cell from './Cell'
 
 
 // LOGIC ============================================
-// cont cell = ...
-// const board = [cel1, cel2, cel3, cel4, cel5, cel6]
+export type Board = Array<Cell.Cell>
 
-export const getStatusAt = (i, board) => board[i].status
+export const getStatusAt = (i: number, board: Board): Cell.Status => board[i].status
 
-export const setStatusAt = (i, status, board) => produce(board, draft => {
+export const setStatusAt = (i: number, status: Cell.Status, board: Board) => produce(board, draft => {
   draft[i].status = status
 })
 
-export const setStatusesBy = (predFn, status, board) => (
+export const setStatusesBy = (predFn: Cell.PredFn, status: Cell.Status, board: Board) => (
   board.map(cell => predFn(cell) ? { ...cell, status } : cell)
 )
 
-export const getStatusesBy = (predFn, board) => (
+export const getStatusesBy = (predFn: Cell.PredFn, board: Board): Array<Cell.Status> => (
   board.flatMap(cell => predFn(cell) ? [cell.status] : [])
 )
 
-export const getSymbolsBy = (predFn, board) => {
-  return board.flatMap(cell => predFn(cell) ? [cell.symbol] : [])
-}
+export const getSymbolsBy = (predFn: Cell.PredFn, board: Board): Array<string> => (
+  board.flatMap(cell => predFn(cell) ? [cell.symbol] : [])
+)
 
-export const canOpenAt = (i, board) => {
+export const canOpenAt = (i: number, board: Board): boolean => {
   return i < board.length
     && Cell.isClosed((board[i]))
     && getStatusesBy(Cell.isBlocking, board).length < 2
 }
 
-export const areOpensEqual = (board) => {
+export const areOpensEqual = (board: Board): boolean => {
   const openSymbols = getSymbolsBy(Cell.isOpen, board)
   return openSymbols.length >= 2 && L.allEquals(openSymbols)
 }
 
-export const areOpensDifferent = (board) => {
+export const areOpensDifferent = (board: Board): boolean => {
   const openSymbols = getSymbolsBy(Cell.isOpen, board)
   return openSymbols.length >= 2 && !L.allEquals(openSymbols)
 }
 
-export const makeRandom = (cols, rows) => {
+export const makeRandom = (cols: number, rows: number): Array<Cell.Cell> => {
   if ((cols * rows / 2) > 26) throw new Error('too big')
   if ((cols * rows) % 2) throw new Error('must be even')
 
-  const res = () => L.range(0, rows * cols / 2)
-    |> L.toCharCodes
-    |> L.duplicateArrValues
-    |> shuffle
-    |> Cell.generate
-
-  return res()
-}
-
-// VIEW ============================================
-export const BoardView = ({ board, onClickAt }) => {
-  return (
-    <Board>
-      {board.map((cell, i) =>
-        <Cell.View key={i} cell={cell} onClick={_ => onClickAt(i)}/>
-      )}
-    </Board>
+  return L.pipe(
+    L.range(0, rows * cols / 2),
+    L.toCharCodes,
+    L.duplicateArrValues,
+    shuffle,
+    Cell.generate
   )
 }
 
-export const ScreenView = ({ background, children }) => (
+// VIEW ============================================
+type BoardViewProps = {
+  board: Board,
+  onClickAt: (i: number) => void
+}
+
+export const BoardView: FC<BoardViewProps> = ({ board, onClickAt }) => {
+  return (
+    <BoardItem>
+      {board.map((cell, i) =>
+        <Cell.View key={i} cell={cell} onClick={_ => onClickAt(i)}/>
+      )}
+    </BoardItem>
+  )
+}
+
+type ScreenViewProps = {
+  background: string
+}
+
+export const ScreenView: FC<ScreenViewProps> = ({ background, children }) => (
   <Screen background={background}>
     {children}
   </Screen>
 )
 
 // ATOMS ============================================
-const Board = styled.div`
+const BoardItem = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   width: 640px;
@@ -92,5 +100,5 @@ const Screen = styled.div`
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  background-color: ${props => props.background};
+  background-color: ${(props: { background: string }): string => props.background};
 `
