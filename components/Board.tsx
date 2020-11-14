@@ -87,18 +87,19 @@ export const ScreenView: FC<ScreenViewProps> = ({ background, children }) => (
 const BoardItem = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  width: 640px;
-  height: 480px;
-  gap: 2px;
+  width: ${props => props.theme.board.width};
+  height: ${props => props.theme.board.height};
+  gap: ${props => props.theme.board.gap};
 `
 
 const Screen = styled.div`
   text-align: center;
   display: flex;
-  width: 640px;
-  height: 480px;
+  width: ${props => props.theme.board.width};
+  height: ${props => props.theme.board.height};
   align-items: center;
   justify-content: center;
   cursor: pointer;
   background-color: ${(props: { background: string }): string => props.background};
+  border-radius: ${props => props.theme.borderRadius};
 `

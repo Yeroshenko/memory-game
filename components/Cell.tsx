@@ -1,5 +1,7 @@
 import React, { FC } from 'react'
-import styled from "styled-components"
+import styled from 'styled-components'
+
+import { themeType } from '../styles'
 
 // LOGIC ============================================
 export enum Status {
@@ -64,20 +66,23 @@ const CellItem = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100px;
-  background-color: ${({ status }: CellItemProps): string => statusToBackground(status)};
+  justify-self: stretch;
+  min-height: 120px;
+  color: ${props => props.theme.typographyWhite};
+  border-radius: ${props => props.theme.borderRadius};
+  background-color: ${props => statusToBackground(props.status, props.theme)};
   cursor: ${({ status }: CellItemProps): string => status === Status.Closed ? 'pointer' : 'auto'};
 `
 
-const statusToBackground = (status: Status) => {
+const statusToBackground = (status: Status, theme: themeType) => {
   switch (status) {
     case Status.Closed:
-      return 'darkgray'
+      return theme.closed
     case Status.Open:
-      return '#dcdcdc'
+      return theme.open
     case Status.Done:
-      return '#a8db8f'
+      return theme.done
     case Status.Failed:
-      return '#db8f8f'
+      return theme.failed
   }
 }

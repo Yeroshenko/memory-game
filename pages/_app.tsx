@@ -1,15 +1,16 @@
 import React, { FC, Fragment } from 'react'
+import { ThemeProvider } from 'styled-components'
 import type { AppProps } from 'next/app'
-
-import { GlobalStyles } from "../styles/globalStyles"
 import 'reset-css/reset.css'
+
+import { GlobalStyles, theme } from '../styles'
 
 const App: FC<AppProps> = ({ Component, pageProps }) => (
   <Fragment>
     <GlobalStyles/>
-    <div id='root'>
+    <ThemeProvider theme={theme}>
       <Component {...pageProps} />
-    </div>
+    </ThemeProvider>
   </Fragment>
 )
 

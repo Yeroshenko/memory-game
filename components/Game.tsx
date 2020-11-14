@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import * as Cell from './Cell'
 import * as Board from './Board'
+import { theme } from '../styles'
 
 // LOGIC ============================================
 export enum Status {
@@ -113,10 +114,10 @@ export const View: FC = () => {
   }, [status])
 
   return (
-    <div onClick={handleStartingClick}>
+    <GameView onClick={handleStartingClick}>
       <StatusLineView status={status} secondLeft={secondLeft}/>
       <ScreenBoxView board={board} status={status} onClickAt={handleRunningClick}/>
-    </div>
+    </GameView>
   )
 }
 
@@ -177,15 +178,22 @@ const ScreenBoxView: FC<ScreenBoxViewProps> = ({ status, board, onClickAt }) => 
 export const statusToBackground = (status: Status): string => {
   switch (status) {
     case Status.Won:
-      return '#a8db8f'
+      return theme.board.won
     case Status.Lost:
-      return '#db8f8f'
+      return theme.board.lost
     default:
-      return '#dcdcdc'
+      return theme.board.default
   }
 }
 
 // ATOMS ============================================
+const GameView = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  margin: auto;
+`
+
 const StatusLine = styled.div`
   color: gray;
   display: flex;
