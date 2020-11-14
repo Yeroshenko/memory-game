@@ -3,9 +3,12 @@ import styled from 'styled-components'
 
 import * as Cell from './Cell'
 import * as Board from './Board'
+import * as Progress from './Progress'
 import { theme } from '../styles'
 
 // LOGIC ============================================
+const TIME_LIMIT = 60
+
 export enum Status {
   Stopped, Running, Won, Lost
 }
@@ -19,7 +22,7 @@ export type State = {
 const startGame = (): State => ({
   board: Board.makeRandom(4, 3),
   status: Status.Running,
-  secondLeft: 60
+  secondLeft: TIME_LIMIT
 })
 
 // CURRYING
@@ -54,6 +57,10 @@ const setStatus = (status: Status) => (state: State): State => ({ ...state, stat
 const nextSecond = (state: State): State => ({
   ...state, secondLeft: Math.max(state.secondLeft - 1, 0)
 })
+
+const showProgress = (state: State): boolean => (
+  state.status === Status.Running || state.status === Status.Lost
+)
 
 // VIEW ============================================
 export const View: FC = () => {
@@ -114,10 +121,13 @@ export const View: FC = () => {
   }, [status])
 
   return (
-    <GameView onClick={handleStartingClick}>
-      <StatusLineView status={status} secondLeft={secondLeft}/>
-      <ScreenBoxView board={board} status={status} onClickAt={handleRunningClick}/>
-    </GameView>
+    <>
+      {showProgress(state) && <Progress.View secondLeft={secondLeft} timeLimit={TIME_LIMIT}/>}
+      <GameView onClick={handleStartingClick}>
+        <StatusLineView status={status} secondLeft={secondLeft}/>
+        <ScreenBoxView board={board} status={status} onClickAt={handleRunningClick}/>
+      </GameView>
+    </>
   )
 }
 
