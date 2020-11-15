@@ -18,4 +18,5 @@ export const Screen = styled.div`
   cursor: pointer;
   background-color: ${(props: { background: string }): string => props.background};
   border-radius: ${props => props.theme.borderRadius};
+  box-shadow: ${props => props.theme.boxShadow};
 `

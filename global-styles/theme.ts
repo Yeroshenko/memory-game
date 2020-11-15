@@ -10,7 +10,7 @@ export const theme = {
 
   // Sizes
   borderRadius: '25px',
-  boxShadow: '0px 1px 14px #19282F',
+  boxShadow: '0px 1px 8px rgba(25, 40, 47, 0.6)',
 
   // Board
   board: {

@@ -48,8 +48,13 @@ export const View: FC<CellViewProps> = ({ cell, onClick }) => {
   const { status, symbol } = cell
 
   return (
-    <Styles.CellItem status={status} onClick={onClick}>
-      {status === Status.Closed ? '' : symbol}
-    </Styles.CellItem>
+    <Styles.CellWrap onClick={onClick}>
+      <Styles.BackSide status={status}>
+        <Styles.Symbol>
+          {symbol}
+        </Styles.Symbol>
+      </Styles.BackSide>
+      <Styles.FrontSide status={status} />
+    </Styles.CellWrap>
   )
 }
