@@ -158,28 +158,28 @@ const ScreenBoxView: FC<ScreenBoxViewProps> = ({ status, board, onClickAt }) => 
     case Status.Stopped:
       return (
         <Board.ScreenView background={statusToBackground(status)}>
-          <div>
-            <h1>Memory Game</h1>
-            <p>Click anywhere to start!</p>
-          </div>
+          <Styles.InfoBlock>
+            <Styles.Title>Memory Game</Styles.Title>
+            <Styles.Description>Click anywhere to start!</Styles.Description>
+          </Styles.InfoBlock>
         </Board.ScreenView>
       )
     case Status.Won:
       return (
         <Board.ScreenView background={statusToBackground(status)}>
-          <div>
-            <h1>Victory!</h1>
-            <p>Click anywhere to start again!</p>
-          </div>
+          <Styles.InfoBlock>
+            <Styles.Title>Victory!</Styles.Title>
+            <Styles.Description>Click anywhere to start again!</Styles.Description>
+          </Styles.InfoBlock>
         </Board.ScreenView>
       )
     case Status.Lost:
       return (
         <Board.ScreenView background={statusToBackground(status)}>
-          <div>
-            <h1>Defeat!</h1>
-            <p>Click anywhere to try again!</p>
-          </div>
+          <Styles.InfoBlock>
+            <Styles.Title>Defeat!</Styles.Title>
+            <Styles.Description>Click anywhere to try again!</Styles.Description>
+          </Styles.InfoBlock>
         </Board.ScreenView>
       )
   }

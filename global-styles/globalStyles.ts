@@ -5,5 +5,5 @@ export const GlobalStyles = createGlobalStyle`
     font-family: 'Nunito', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
     font-size: 20px;
     line-height: 1.3;
-  }  
+  }
 `

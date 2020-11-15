@@ -8,10 +8,27 @@ export const GameView = styled.div`
 `
 
 export const StatusLine = styled.div`
-  color: gray;
+  width: 100%;
   display: flex;
   justify-content: space-between;
-  width: 100%;
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
+  padding: 0 4px;
+  margin-bottom: 8px;
+  font-size: 28px;
+  color: ${props => props.theme.typographyWhite};
+`
+
+export const InfoBlock = styled.div`
+  text-align: center;
+`
+
+export const Title = styled.h1`
+  font-weight: bold;
+  font-size: 60px;
+  color: ${props => props.theme.typographyWhite};
+  margin-bottom: 24px;
+`
+
+export const Description = styled.div`
+  font-size: 48px;
+  color: ${props => props.theme.typographyWhite};
 `

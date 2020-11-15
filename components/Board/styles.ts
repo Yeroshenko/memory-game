@@ -9,7 +9,6 @@ export const BoardItem = styled.div`
 `
 
 export const Screen = styled.div`
-  text-align: center;
   display: flex;
   width: ${props => props.theme.board.width};
   height: ${props => props.theme.board.height};
