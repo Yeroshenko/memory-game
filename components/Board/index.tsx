@@ -2,8 +2,8 @@ import React, { FC } from 'react'
 import produce from 'immer'
 import shuffle from 'lodash.shuffle'
 
-import * as L from '../../lib'
-import * as Cell from '../Cell'
+import * as L from 'lib'
+import * as Cell from 'components/Cell'
 import * as Styles from './styles'
 
 // LOGIC ============================================

@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 
-import * as Game from '../components/Game'
-import { Centered } from '../layouts/Centered'
+import * as Game from 'components/Game'
+import { Centered } from 'layouts/Centered'
 
 const MainPage: FC = () => (
   <Centered>

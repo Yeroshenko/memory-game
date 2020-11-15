@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react'
-import * as Styles from './styles'
 
+import * as Styles from './styles'
 
 // VIEW ============================================
 type ProgressViewProps = {

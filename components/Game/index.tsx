@@ -1,10 +1,10 @@
 import React, { FC, useEffect } from 'react'
 
-import * as Cell from '../Cell'
-import * as Board from '../Board'
-import * as Progress from '../Progress'
+import { theme } from 'global-styles'
+import * as Cell from 'components/Cell'
+import * as Board from 'components/Board'
+import * as Progress from 'components/Progress'
 import * as Styles from './styles'
-import { theme } from '../../global-styles'
 
 // LOGIC ============================================
 const TIME_LIMIT = 60

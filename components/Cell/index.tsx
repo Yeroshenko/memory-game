@@ -2,7 +2,6 @@ import React, { FC } from 'react'
 
 import * as Styles from './styles'
 
-
 // LOGIC ============================================
 export enum Status {
   Open, Closed, Done, Failed,

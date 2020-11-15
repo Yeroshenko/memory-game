@@ -1,5 +1,6 @@
 import styled from 'styled-components'
-import { themeType } from '../../global-styles'
+
+import { themeType } from 'global-styles'
 import { Status } from './index'
 
 type CellItemProps = {

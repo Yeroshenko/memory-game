@@ -18,7 +18,7 @@ export const theme = {
     height: '500px',
     gap: '10px',
 
-    won: '#40DD9D',
+    won: '#40dd9d',
     lost: '#FF565E',
     default: '#96A7AF'
   }
