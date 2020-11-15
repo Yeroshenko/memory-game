@@ -1,4 +1,5 @@
 import React, { FC, useEffect } from 'react'
+import GithubCorner from 'react-github-corner'
 
 import { theme } from 'global-styles'
 import * as Cell from 'components/Cell'
@@ -122,7 +123,14 @@ export const View: FC = () => {
 
   return (
     <>
-      {showProgress(state) && <Progress.View secondLeft={secondLeft} timeLimit={TIME_LIMIT}/>}
+      {showProgress(state)
+        ? <Progress.View secondLeft={secondLeft} timeLimit={TIME_LIMIT}/>
+        : <GithubCorner
+          href='https://github.com/Yeroshenko/memory-game'
+          size={theme.githubCorner.size}
+          bannerColor={theme.githubCorner.bg}
+        />
+      }
       <Styles.GameView onClick={handleStartingClick}>
         <StatusLineView status={status} secondLeft={secondLeft}/>
         <ScreenBoxView board={board} status={status} onClickAt={handleRunningClick}/>

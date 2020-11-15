@@ -21,6 +21,12 @@ export const theme = {
     won: '#40dd9d',
     lost: '#FF565E',
     default: '#96A7AF'
+  },
+
+  // Other
+  githubCorner: {
+    size: '120',
+    bg: '#475E69',
   }
 }
 
