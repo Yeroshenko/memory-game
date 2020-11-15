@@ -1,10 +1,10 @@
 import React, { FC, useEffect } from 'react'
-import styled from 'styled-components'
 
-import * as Cell from './Cell'
-import * as Board from './Board'
-import * as Progress from './Progress'
-import { theme } from '../styles'
+import * as Cell from '../Cell'
+import * as Board from '../Board'
+import * as Progress from '../Progress'
+import * as Styles from './styles'
+import { theme } from '../../global-styles'
 
 // LOGIC ============================================
 const TIME_LIMIT = 60
@@ -59,7 +59,7 @@ const nextSecond = (state: State): State => ({
 })
 
 const showProgress = (state: State): boolean => (
-  state.status === Status.Running || state.status === Status.Lost
+  state.status === Status.Running || state.status === Status.Lost || state.status === Status.Won
 )
 
 // VIEW ============================================
@@ -123,10 +123,10 @@ export const View: FC = () => {
   return (
     <>
       {showProgress(state) && <Progress.View secondLeft={secondLeft} timeLimit={TIME_LIMIT}/>}
-      <GameView onClick={handleStartingClick}>
+      <Styles.GameView onClick={handleStartingClick}>
         <StatusLineView status={status} secondLeft={secondLeft}/>
         <ScreenBoxView board={board} status={status} onClickAt={handleRunningClick}/>
-      </GameView>
+      </Styles.GameView>
     </>
   )
 }
@@ -137,12 +137,12 @@ type StatusLineView = {
 }
 
 const StatusLineView: FC<StatusLineView> = ({ status, secondLeft }) => (
-  <StatusLine>
+  <Styles.StatusLine>
     <div>{status === Status.Running ? '🙈' : 'Lets Go!'}</div>
     <div>
       {status === Status.Running && `Second left: ${secondLeft}`}
     </div>
-  </StatusLine>
+  </Styles.StatusLine>
 )
 
 type ScreenBoxViewProps = {
@@ -195,20 +195,3 @@ export const statusToBackground = (status: Status): string => {
       return theme.board.default
   }
 }
-
-// ATOMS ============================================
-const GameView = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: fit-content;
-  margin: auto;
-`
-
-const StatusLine = styled.div`
-  color: gray;
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
-`

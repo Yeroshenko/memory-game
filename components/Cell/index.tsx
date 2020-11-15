@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
-import styled from 'styled-components'
 
-import { themeType } from '../styles'
+import * as Styles from './styles'
+
 
 // LOGIC ============================================
 export enum Status {
@@ -49,40 +49,8 @@ export const View: FC<CellViewProps> = ({ cell, onClick }) => {
   const { status, symbol } = cell
 
   return (
-    <CellItem status={status} onClick={onClick}>
+    <Styles.CellItem status={status} onClick={onClick}>
       {status === Status.Closed ? '' : symbol}
-    </CellItem>
+    </Styles.CellItem>
   )
-}
-
-// ATOMS ============================================
-type CellItemProps = {
-  status: Status
-}
-
-const CellItem = styled.div`
-  font-size: 4rem;
-  line-height: 1.1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  justify-self: stretch;
-  min-height: 120px;
-  color: ${props => props.theme.typographyWhite};
-  border-radius: ${props => props.theme.borderRadius};
-  background-color: ${props => statusToBackground(props.status, props.theme)};
-  cursor: ${({ status }: CellItemProps): string => status === Status.Closed ? 'pointer' : 'auto'};
-`
-
-const statusToBackground = (status: Status, theme: themeType) => {
-  switch (status) {
-    case Status.Closed:
-      return theme.closed
-    case Status.Open:
-      return theme.open
-    case Status.Done:
-      return theme.done
-    case Status.Failed:
-      return theme.failed
-  }
 }

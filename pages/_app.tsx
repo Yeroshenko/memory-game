@@ -3,7 +3,7 @@ import { ThemeProvider } from 'styled-components'
 import type { AppProps } from 'next/app'
 import 'reset-css/reset.css'
 
-import { GlobalStyles, theme } from '../styles'
+import { GlobalStyles, theme } from '../global-styles'
 
 const App: FC<AppProps> = ({ Component, pageProps }) => (
   <Fragment>

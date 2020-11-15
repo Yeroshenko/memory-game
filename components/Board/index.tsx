@@ -1,11 +1,10 @@
 import React, { FC } from 'react'
 import produce from 'immer'
 import shuffle from 'lodash.shuffle'
-import styled from 'styled-components'
 
-import * as L from '../lib'
-import * as Cell from './Cell'
-
+import * as L from '../../lib'
+import * as Cell from '../Cell'
+import * as Styles from './styles'
 
 // LOGIC ============================================
 export type Board = Array<Cell.Cell>
@@ -65,11 +64,11 @@ type BoardViewProps = {
 
 export const BoardView: FC<BoardViewProps> = ({ board, onClickAt }) => {
   return (
-    <BoardItem>
+    <Styles.BoardItem>
       {board.map((cell, i) =>
         <Cell.View key={i} cell={cell} onClick={_ => onClickAt(i)}/>
       )}
-    </BoardItem>
+    </Styles.BoardItem>
   )
 }
 
@@ -78,28 +77,7 @@ type ScreenViewProps = {
 }
 
 export const ScreenView: FC<ScreenViewProps> = ({ background, children }) => (
-  <Screen background={background}>
+  <Styles.Screen background={background}>
     {children}
-  </Screen>
+  </Styles.Screen>
 )
-
-// ATOMS ============================================
-const BoardItem = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  width: ${props => props.theme.board.width};
-  height: ${props => props.theme.board.height};
-  gap: ${props => props.theme.board.gap};
-`
-
-const Screen = styled.div`
-  text-align: center;
-  display: flex;
-  width: ${props => props.theme.board.width};
-  height: ${props => props.theme.board.height};
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  background-color: ${(props: { background: string }): string => props.background};
-  border-radius: ${props => props.theme.borderRadius};
-`
