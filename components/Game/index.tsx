@@ -133,7 +133,13 @@ export const View: FC = () => {
       }
       <Styles.GameView onClick={handleStartingClick}>
         <StatusLineView status={status} secondLeft={secondLeft}/>
-        <ScreenBoxView board={board} status={status} onClickAt={handleRunningClick}/>
+        <ScreenBoxView
+          board={board}
+          status={status}
+          secondLeft={secondLeft}
+          timeLimit={TIME_LIMIT}
+          onClickAt={handleRunningClick}
+        />
       </Styles.GameView>
     </>
   )
@@ -156,10 +162,14 @@ const StatusLineView: FC<StatusLineView> = ({ status, secondLeft }) => (
 type ScreenBoxViewProps = {
   status: Status,
   board: Board.Board,
+  secondLeft: number,
+  timeLimit: number,
   onClickAt: (i: number) => void
 }
 
-const ScreenBoxView: FC<ScreenBoxViewProps> = ({ status, board, onClickAt }) => {
+const ScreenBoxView: FC<ScreenBoxViewProps> = ({ status, board, secondLeft, timeLimit, onClickAt }) => {
+  const getResult = (timeLimit: number, secondLeft: number): number => timeLimit - secondLeft
+
   switch (status) {
     case Status.Running:
       return <Board.BoardView board={board} onClickAt={onClickAt}/>
@@ -176,7 +186,9 @@ const ScreenBoxView: FC<ScreenBoxViewProps> = ({ status, board, onClickAt }) => 
       return (
         <Board.ScreenView background={statusToBackground(status)}>
           <Styles.InfoBlock>
-            <Styles.Title>Victory!</Styles.Title>
+            <Styles.Title>
+              Your result: {getResult(timeLimit, secondLeft)}s
+            </Styles.Title>
             <Styles.Description>Click anywhere to start again!</Styles.Description>
           </Styles.InfoBlock>
         </Board.ScreenView>

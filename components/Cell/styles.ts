@@ -25,10 +25,9 @@ const CommonToSide = styled.div`
   align-items: center;
   justify-content: center;
   flex: 1 1 100%;
-  transition: all 1s cubic-bezier(.5,1.3,.5,1.3);
+  transition: transform 1s cubic-bezier(.5,1.3,.5,1.3), background-color .3s ease-in-out;
   transform-style: preserve-3d;
   box-shadow: ${props => props.theme.boxShadow};
-
 `
 
 export const FrontSide = styled(CommonToSide)`  
@@ -36,7 +35,6 @@ export const FrontSide = styled(CommonToSide)`
   transform: ${({ status }: CellProps): string => status === Status.Closed ? 'rotateY(0deg)' : 'rotateY(180deg)'};
   z-index: ${({ status }: CellProps): string => status === Status.Closed ? '10' : '-1'};
   cursor: pointer;
-
 `
 
 export const BackSide = styled(CommonToSide)`
