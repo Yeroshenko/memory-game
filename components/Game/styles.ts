@@ -21,6 +21,14 @@ export const InfoBlock = styled.div`
   text-align: center;
 `
 
+export const ButtonsWrap = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 132px;
+`
+
 export const Title = styled.h1`
   font-weight: bold;
   font-size: 60px;

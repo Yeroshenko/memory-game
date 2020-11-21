@@ -20,7 +20,7 @@ export const Track = styled.div`
 
 export const Progress = styled.div`
   border-radius: 10px;
-  background-color: #FFC542;
+  background-color: ${props => props.theme.yellow};
   width: ${({ width }: ProgressPros): string => width + '%'};
   position: absolute;
   top: 0;

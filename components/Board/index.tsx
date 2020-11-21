@@ -59,12 +59,16 @@ export const makeRandom = (cols: number, rows: number): Array<Cell.Cell> => {
 // VIEW ============================================
 type BoardViewProps = {
   board: Board,
+  grid: {
+    cols: number
+    rows: number
+  }
   onClickAt: (i: number) => void
 }
 
-export const BoardView: FC<BoardViewProps> = ({ board, onClickAt }) => {
+export const BoardView: FC<BoardViewProps> = ({ board, onClickAt, grid }) => {
   return (
-    <Styles.BoardItem>
+    <Styles.BoardItem grid={grid}>
       {board.map((cell, i) =>
         <Cell.View key={i} cell={cell} onClick={_ => onClickAt(i)}/>
       )}

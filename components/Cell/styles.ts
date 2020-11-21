@@ -7,11 +7,9 @@ type CellProps = {
   status: Status
 }
 
-
 export const CellWrap = styled.div`
   position: relative;
   justify-self: stretch;
-  min-height: 120px;
   perspective: 1000px;
   color: ${props => props.theme.typographyWhite};
   border-radius: ${props => props.theme.borderRadius};
@@ -27,7 +25,7 @@ const CommonToSide = styled.div`
   flex: 1 1 100%;
   transition: transform 1s cubic-bezier(.5,1.3,.5,1.3), background-color .3s ease-in-out;
   transform-style: preserve-3d;
-  box-shadow: ${props => props.theme.boxShadow};
+  box-shadow: ${props => props.theme.shadows.main};
 `
 
 export const FrontSide = styled(CommonToSide)`  

@@ -1,32 +1,49 @@
 import React, { FC, useEffect } from 'react'
 import GithubCorner from 'react-github-corner'
 
+import { TIME_LIMIT, INITIAL_LEVEL, DIFFICULTY_LEVELS } from 'constants/game'
+import { GIT_LINK } from 'constants/other'
 import { theme } from 'global-styles'
 import * as Cell from 'components/Cell'
 import * as Board from 'components/Board'
 import * as Progress from 'components/Progress'
+import { Select, Button } from 'components/UI'
+import HomeIcon from '../../assets/icons/home.svg'
 import * as Styles from './styles'
 
 // LOGIC ============================================
-const TIME_LIMIT = 60
-
 export enum Status {
   Stopped, Running, Won, Lost
+}
+
+type LevelValue = {
+  cols: number
+  rows: number
+}
+
+type Level = {
+  label: string
+  value: LevelValue
 }
 
 export type State = {
   board: Board.Board,
   status: Status,
-  secondLeft: number
+  secondLeft: number,
+  level: Level
 }
 
-const startGame = (): State => ({
-  board: Board.makeRandom(4, 3),
+const startGame = (state: State): State => ({
+  ...state,
   status: Status.Running,
   secondLeft: TIME_LIMIT
 })
 
-// CURRYING
+const goHome = (state: State): State => ({
+  ...state,
+  status: Status.Stopped,
+})
+
 const openCell = (i: number) => (state: State): State => ({
   ...state,
   board: Board.setStatusAt(i, Cell.Status.Open, state.board)
@@ -63,18 +80,29 @@ const showProgress = (state: State): boolean => (
   state.status === Status.Running || state.status === Status.Lost || state.status === Status.Won
 )
 
+const generateNewBoard = ({ cols, rows }: LevelValue): Board.Board => Board.makeRandom(cols, rows)
+
 // VIEW ============================================
 export const View: FC = () => {
   const [state, setState] = React.useState({
-    ...startGame(),
+    board: generateNewBoard(INITIAL_LEVEL.value),
+    secondLeft: TIME_LIMIT,
     status: Status.Stopped,
+    level: INITIAL_LEVEL
   })
 
-  const { board, status, secondLeft } = state
+  const { board, status, secondLeft, level } = state
 
   const handleStartingClick = (): void => {
     if (status !== Status.Running) {
+      setNewLevel(state.level)
       setState(startGame)
+    }
+  }
+
+  const handleHomeClick = (): void => {
+    if (status !== Status.Running) {
+      setState(goHome)
     }
   }
 
@@ -83,6 +111,15 @@ export const View: FC = () => {
       setState(openCell(i))
     }
   }
+
+  const setNewLevel = (level: Level): void => {
+    setState((state: State) => ({
+      ...state,
+      level: level,
+      board: generateNewBoard(level.value)
+    }))
+  }
+
 
   //Winning/Losing conditions
   useEffect(() => {
@@ -102,7 +139,7 @@ export const View: FC = () => {
     } else if (Board.areOpensDifferent(board)) {
       setState(failStep1)
       setTimeout(() => {
-        setState((failStep2))
+        setState(failStep2)
       }, 500)
     }
   }, [board])
@@ -126,19 +163,23 @@ export const View: FC = () => {
       {showProgress(state)
         ? <Progress.View secondLeft={secondLeft} timeLimit={TIME_LIMIT}/>
         : <GithubCorner
-          href='https://github.com/Yeroshenko/memory-game'
+          href={GIT_LINK}
           size={theme.githubCorner.size}
           bannerColor={theme.githubCorner.bg}
         />
       }
-      <Styles.GameView onClick={handleStartingClick}>
-        <StatusLineView status={status} secondLeft={secondLeft}/>
+      <Styles.GameView>
+        <StatusLineView status={status} secondLeft={secondLeft} level={level.label}/>
         <ScreenBoxView
           board={board}
           status={status}
           secondLeft={secondLeft}
           timeLimit={TIME_LIMIT}
           onClickAt={handleRunningClick}
+          onClickStart={handleStartingClick}
+          onClickHome={handleHomeClick}
+          boardGrid={level.value}
+          setNewLevel={setNewLevel}
         />
       </Styles.GameView>
     </>
@@ -147,12 +188,13 @@ export const View: FC = () => {
 
 type StatusLineView = {
   status: Status,
-  secondLeft: number
+  secondLeft: number,
+  level: string
 }
 
-const StatusLineView: FC<StatusLineView> = ({ status, secondLeft }) => (
+const StatusLineView: FC<StatusLineView> = ({ status, secondLeft, level }) => (
   <Styles.StatusLine>
-    <div>{status === Status.Running ? '🙈' : 'Lets Go!'}</div>
+    <div>{status === Status.Running ? level : '🙈'}</div>
     <div>
       {status === Status.Running && `Second left: ${secondLeft}`}
     </div>
@@ -164,21 +206,38 @@ type ScreenBoxViewProps = {
   board: Board.Board,
   secondLeft: number,
   timeLimit: number,
+  onClickStart: () => void
+  onClickHome: () => void
+  boardGrid: LevelValue
+  setNewLevel: (level: any) => void
   onClickAt: (i: number) => void
 }
 
-const ScreenBoxView: FC<ScreenBoxViewProps> = ({ status, board, secondLeft, timeLimit, onClickAt }) => {
+const ScreenBoxView: FC<ScreenBoxViewProps> = (
+  {
+    status,
+    board,
+    secondLeft,
+    timeLimit,
+    onClickAt,
+    onClickStart,
+    onClickHome,
+    setNewLevel,
+    boardGrid
+  }) => {
+
   const getResult = (timeLimit: number, secondLeft: number): number => timeLimit - secondLeft
 
   switch (status) {
     case Status.Running:
-      return <Board.BoardView board={board} onClickAt={onClickAt}/>
+      return <Board.BoardView board={board} grid={boardGrid} onClickAt={onClickAt}/>
     case Status.Stopped:
       return (
         <Board.ScreenView background={statusToBackground(status)}>
           <Styles.InfoBlock>
-            <Styles.Title>Memory Game</Styles.Title>
-            <Styles.Description>Click anywhere to start!</Styles.Description>
+            <Styles.Title style={{ marginBottom: '60px' }}>Memory Game</Styles.Title>
+            <Select style={{ marginBottom: '92px' }} options={DIFFICULTY_LEVELS} onChange={setNewLevel}/>
+            <Button type='primary' onClick={onClickStart}>Click to play</Button>
           </Styles.InfoBlock>
         </Board.ScreenView>
       )
@@ -189,7 +248,10 @@ const ScreenBoxView: FC<ScreenBoxViewProps> = ({ status, board, secondLeft, time
             <Styles.Title>
               Your result: {getResult(timeLimit, secondLeft)}s
             </Styles.Title>
-            <Styles.Description>Click anywhere to start again!</Styles.Description>
+            <Styles.ButtonsWrap>
+              <Button onClick={onClickHome} type='primary' icon={<HomeIcon/>}/>
+              <Button onClick={onClickStart}>Play again</Button>
+            </Styles.ButtonsWrap>
           </Styles.InfoBlock>
         </Board.ScreenView>
       )
@@ -198,7 +260,10 @@ const ScreenBoxView: FC<ScreenBoxViewProps> = ({ status, board, secondLeft, time
         <Board.ScreenView background={statusToBackground(status)}>
           <Styles.InfoBlock>
             <Styles.Title>Defeat!</Styles.Title>
-            <Styles.Description>Click anywhere to try again!</Styles.Description>
+            <Styles.ButtonsWrap>
+              <Button onClick={onClickHome} type='primary' icon={<HomeIcon/>}/>
+              <Button onClick={onClickStart}>Try again</Button>
+            </Styles.ButtonsWrap>
           </Styles.InfoBlock>
         </Board.ScreenView>
       )

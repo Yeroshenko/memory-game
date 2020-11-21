@@ -6,4 +6,15 @@ export const GlobalStyles = createGlobalStyle`
     font-size: 20px;
     line-height: 1.3;
   }
+  
+  * {
+    outline: none;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+  
+  button {
+    font-family: inherit;
+  }
 `
