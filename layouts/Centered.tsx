@@ -11,8 +11,12 @@ const CenteredLayout = styled.div`
   display: flex;
   align-content: center;
   justify-content: center;
-  min-height: 100vh;
+  height: 100vh;
+  min-height: 568px;
   max-width: 100%;
   padding: 0 15px;
   background-color: ${props => props.theme.bg};
+  @media (max-width: 360px) {
+    padding: 0 5px;
+  }
 `

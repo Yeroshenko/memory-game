@@ -10,6 +10,11 @@ export const Container = styled.div`
   position: relative;
   min-width: 350px;
   display: block;
+  @media (max-width: 700px) {
+    min-width: 300px;
+    max-width: 100%;
+  }
+
 `
 
 export const Button = styled.button`

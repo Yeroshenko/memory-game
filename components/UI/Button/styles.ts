@@ -12,7 +12,7 @@ export const Button = styled.button`
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  min-width: ${(props: ButtonProps) => props.isIcon ? 'auto': '315px'};
+  min-width: ${(props: ButtonProps) => props.isIcon ? 'auto': '300px'};
   width: ${(props: ButtonProps) => props.isIcon ? '58px': 'auto'};
   height: 58px;
   font-size: ${(props: ButtonProps) => props.isIcon ? '26px': '24px'};

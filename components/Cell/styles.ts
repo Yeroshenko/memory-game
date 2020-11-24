@@ -13,6 +13,9 @@ export const CellWrap = styled.div`
   perspective: 1000px;
   color: ${props => props.theme.typographyWhite};
   border-radius: ${props => props.theme.borderRadius};
+  @media (max-width: 700px) {
+    border-radius: ${props => props.theme.borderRadiusMedium};
+  }
 `
 
 const CommonToSide = styled.div`
@@ -26,6 +29,9 @@ const CommonToSide = styled.div`
   transition: transform 1s cubic-bezier(.5,1.3,.5,1.3), background-color .3s ease-in-out;
   transform-style: preserve-3d;
   box-shadow: ${props => props.theme.shadows.main};
+  @media (max-width: 700px) {
+    font-size: 60px;
+  }
 `
 
 export const FrontSide = styled(CommonToSide)`  

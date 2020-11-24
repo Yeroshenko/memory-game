@@ -12,14 +12,18 @@ export const ProgressWrap = styled.div`
 `
 
 export const Track = styled.div`
-  border-radius: 10px;
+  border-radius: ${props => props.theme.borderRadiusMini};
   background-color: #2A3C44;
   position: relative;
   height: 10px;
+  @media (max-width: 700px) {
+    height: 6px;
+    border-radius: 2px;
+  }
 `
 
 export const Progress = styled.div`
-  border-radius: 10px;
+  border-radius: ${props => props.theme.borderRadiusMini};
   background-color: ${props => props.theme.yellow};
   width: ${({ width }: ProgressPros): string => width + '%'};
   position: absolute;

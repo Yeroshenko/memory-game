@@ -11,6 +11,12 @@ export const BoardItem = styled.div`
   width: ${props => props.theme.board.width};
   height: ${props => props.theme.board.height};
   gap: ${props => props.theme.board.gap};
+  @media (max-width: 700px) {
+    width: 100%;
+    // Rotate board
+    grid-template-columns: ${({ grid }: BoardItemProps) => `repeat(${grid.rows}, 1fr)`};
+    grid-template-rows: ${({ grid }: BoardItemProps) => `repeat(${grid.cols}, 1fr)`};
+  }
 `
 
 export const Screen = styled.div`
@@ -21,4 +27,8 @@ export const Screen = styled.div`
   justify-content: center;
   background: ${(props: { background: string }): string => props.background};
   border-radius: ${props => props.theme.borderRadius};
+  @media (max-width: 700px) {
+    width: 100%;
+    border-radius: ${props => props.theme.borderRadiusMedium};
+  }
 `

@@ -13,7 +13,8 @@ export const theme = {
   typographyDark: '#22343C',
 
   // Sizes
-  borderRadius: '25px',
+  borderRadius: '24px',
+  borderRadiusMedium: '16px',
   borderRadiusMini: '12px',
 
   shadows: {

@@ -3,11 +3,12 @@ import GithubCorner from 'react-github-corner'
 
 import { TIME_LIMIT, INITIAL_LEVEL, DIFFICULTY_LEVELS } from 'constants/game'
 import { GIT_LINK } from 'constants/other'
+
 import { theme } from 'global-styles'
 import * as Cell from 'components/Cell'
 import * as Board from 'components/Board'
 import * as Progress from 'components/Progress'
-import { Select, Button } from 'components/UI'
+import { Select, Button, } from 'components/UI'
 import HomeIcon from '../../assets/icons/home.svg'
 import * as Styles from './styles'
 
@@ -162,11 +163,7 @@ export const View: FC = () => {
     <>
       {showProgress(state)
         ? <Progress.View secondLeft={secondLeft} timeLimit={TIME_LIMIT}/>
-        : <GithubCorner
-          href={GIT_LINK}
-          size={theme.githubCorner.size}
-          bannerColor={theme.githubCorner.bg}
-        />
+        : <GithubCorner href={GIT_LINK}/>
       }
       <Styles.GameView>
         <StatusLineView status={status} secondLeft={secondLeft} level={level.label}/>
@@ -235,8 +232,10 @@ const ScreenBoxView: FC<ScreenBoxViewProps> = (
       return (
         <Board.ScreenView background={statusToBackground(status)}>
           <Styles.InfoBlock>
-            <Styles.Title style={{ marginBottom: '60px' }}>Memory Game</Styles.Title>
-            <Select style={{ marginBottom: '92px' }} options={DIFFICULTY_LEVELS} onChange={setNewLevel}/>
+            <Styles.WelcomeTitle>Memory Game</Styles.WelcomeTitle>
+            <Styles.SelectWrap>
+              <Select options={DIFFICULTY_LEVELS} onChange={setNewLevel}/>
+            </Styles.SelectWrap>
             <Button type='primary' onClick={onClickStart}>Click to play</Button>
           </Styles.InfoBlock>
         </Board.ScreenView>
